@@ -42,6 +42,8 @@
   list-style: none;
   margin-top:10px;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .chat-section{
   overflow-y:scroll;
