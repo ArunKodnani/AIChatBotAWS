@@ -4,13 +4,18 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="custom.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.206.0.min.js"></script>
+	 <script src="amazon-cognito-identity.min.js"></script>
+	<!-- <script src="http://requirejs.org/docs/release/2.2.0/minified/require.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
-<body background="dark.jpg">
+<body background="chatbot.jpg">
 
-
-
+<div class="logoutButton">
+	<button type="button" onclick="userLogout()"> Sign Out </button>
+</div>
+b
 <div class="main-section">
 	<div class="row border-chat">
 		<div class="col-md-12 col-sm-12 col-xs-12 first-section">
@@ -53,9 +58,6 @@
 		window.location.replace("https://testappdomiansmg727.auth.us-east-2.amazoncognito.com/login?response_type=code&client_id=1dds53asoh6nkrnivi8bedhn8f&redirect_uri=https://s3.us-east-2.amazonaws.com/awscloudsmg/index.html");
 	}
 	
-
-
-
 	$(document).ready(function(){
     	$(".left-first-section").click(function(){
             $('.main-section').toggleClass("open-more");
@@ -66,6 +68,29 @@
             $('.main-section').toggleClass("open-more");
         });
     });
+
+
+
+ function userLogout(){
+	//var AWS = require('aws-sdk');
+	//var AWSCognito = require('amazon-cognito-identity-js');
+ 	var data = {
+		UserPoolId : 'us-east-2_PwOeQJTSG',
+		ClientId : '67l9udsr374o5lrbskghc2v9q9'
+	};
+
+	var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
+	var cognitoUser = userPool.getCurrentUser();
+	console.log(cognitoUser);
+	if (cognitoUser != null) {
+		  cognitoUser.getSession(function(err, result) {
+		  	if (result) {
+				cosole.log("inside IF");
+          		cognitoUser.signOut();
+        	}
+        });
+	}
+}
 
  function updateList() {
 	 var string = document.getElementById("usermessage").value;
@@ -86,9 +111,6 @@
 	 document.getElementById("usermessage").value = "";
 
 	 getResponse(string);
-
-
-
  }
 
 
@@ -126,10 +148,7 @@ function getResponse(string){
       }
     });
 
-
 }
-
-
 
 
 function updateIncomingMessage(string){
