@@ -4,8 +4,9 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="custom.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.206.0.min.js"></script>
+	<!-- <script src="https://sdk.amazonaws.com/js/aws-sdk-2.206.0.min.js"></script> -->
 	 <script src="amazon-cognito-identity.min.js"></script>
+	 <script src="aws-sdk-2.206.0.min.js"></script>
 	<!-- <script src="http://requirejs.org/docs/release/2.2.0/minified/require.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -13,9 +14,9 @@
 <body background="chatbot.jpg">
 
 <div class="logoutButton">
-	<button type="button" onclick="userLogout()"> Sign Out </button>
+	<button type="button" onclick="location.href = 'https://youtube.com';"> Sign Out </button>
 </div>
-b
+
 <div class="main-section">
 	<div class="row border-chat">
 		<div class="col-md-12 col-sm-12 col-xs-12 first-section">
@@ -71,26 +72,25 @@ b
 
 
 
- function userLogout(){
-	//var AWS = require('aws-sdk');
-	//var AWSCognito = require('amazon-cognito-identity-js');
- 	var data = {
-		UserPoolId : 'us-east-2_PwOeQJTSG',
-		ClientId : '67l9udsr374o5lrbskghc2v9q9'
-	};
+//  function userLogout(){
+//  	var data = {
+// 		UserPoolId : 'us-east-2_PwOeQJTSG',
+// 		ClientId : '67l9udsr374o5lrbskghc2v9q9'
+// 	};
 
-	var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
-	var cognitoUser = userPool.getCurrentUser();
-	console.log(cognitoUser);
-	if (cognitoUser != null) {
-		  cognitoUser.getSession(function(err, result) {
-		  	if (result) {
-				cosole.log("inside IF");
-          		cognitoUser.signOut();
-        	}
-        });
-	}
-}
+// 	var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
+// 	console.log(userPool);
+// 	var cognitoUser = userPool.getCurrentUser();
+// 	console.log(cognitoUser);
+// 	if (cognitoUser != null) {
+// 		  cognitoUser.getSession(function(err, result) {
+// 		  	if (result) {
+// 				cosole.log("inside IF");
+//           		cognitoUser.signOut();
+//         	}
+//         });
+// 	}
+// }
 
  function updateList() {
 	 var string = document.getElementById("usermessage").value;
