@@ -3,11 +3,11 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="custom.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
-<body>
+<body background="nyc.jpg">
 
 
 
@@ -30,7 +30,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12 second-section">
 			<div class="chat-section">
 				<ul id = "chatlist">
-					
+
 				</ul>
 			</div>
 		</div>
@@ -46,6 +46,16 @@
 
 
 <script type="text/javascript">
+
+	var str = window.location.href;
+	var index = str.indexOf("code=");
+	if(index==-1){
+		window.location.replace("https://testappdomiansmg727.auth.us-east-2.amazoncognito.com/login?response_type=code&client_id=1dds53asoh6nkrnivi8bedhn8f&redirect_uri=https://s3.us-east-2.amazonaws.com/awscloudsmg/index.html");
+	}
+	
+
+
+
 	$(document).ready(function(){
     	$(".left-first-section").click(function(){
             $('.main-section').toggleClass("open-more");
@@ -56,7 +66,7 @@
             $('.main-section').toggleClass("open-more");
         });
     });
-    
+
  function updateList() {
 	 var string = document.getElementById("usermessage").value;
 	 console.log(string);
@@ -76,9 +86,9 @@
 	 document.getElementById("usermessage").value = "";
 
 	 getResponse(string);
-	 
 
-	 
+
+
  }
 
 
@@ -98,7 +108,7 @@ function getResponse(string){
 	}
 
 	$.ajax({
-      url: ``, //Enter your API Gateway URL here
+      url: `https://30jy0vcmea.execute-api.us-east-2.amazonaws.com/betaChatBot/chatbot`,
       type: 'POST',
       headers: {
       	'Content-Type': 'application/json'
@@ -139,14 +149,7 @@ function updateIncomingMessage(string){
 	 ul.appendChild(li);
 	 document.getElementById("usermessage").value = "";
 
-	 if (string == "Who is Ronak?")
-	 {
-		 updateIncomingMessage("TATTI DON !!!");
-	 }
-	 if (string == "Who is Ronak's Girl friend?")
-	 {
-		 updateIncomingMessage("His RIGHT HAND !!!! 8====D");
-	 }
+
 
 }
 
