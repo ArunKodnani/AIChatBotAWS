@@ -1,5 +1,6 @@
 import os
 import json
+import boto3
 
 
 def lambda_handler(event, context):
@@ -8,10 +9,18 @@ def lambda_handler(event, context):
     print (json.dumps(event))
     message = event['messages'][0]['unstructured']['text']
     print (message)
-    if message in questionReplies:
-        messageReply = questionReplies[message]
-    else:
-        messageReply = "Oops, I dont have a response to your request yet"
+    client = boto3.client('lex-runtime', region_name = 'us-east-1')
+    response = client.post_text(
+    botName='CustomerServiceBot',
+    botAlias='botAlias',
+    userId=event['messages'][0]['unstructured']['id'],
+    sessionAttributes={
+    },
+    requestAttributes={
+    },
+    inputText=message
+    )
+    messageReply = response['message']
      
     responseBody = {'messages': [{'type': 'string','unstructured': {'id': 'string','text': 'string','timestamp': 'string'}}]}
     responseBody['messages'][0]['unstructured']['text'] = messageReply
@@ -22,8 +31,3 @@ def lambda_handler(event, context):
     }
     
     return response
-    
-    
-    
-    
-    

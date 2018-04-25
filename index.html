@@ -107,6 +107,17 @@
 // }
 let apigClient = {};
 
+var getParameterByName = function(name, url) {
+		if (!url) url = window.location.href;
+		name = name.replace(/[\[\]]/g, "\\$&");
+		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+			results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, " "));
+	};
+
+
 function chatbotResponse(mess) {
 		botMessage = "Error Mothafucka";
 
@@ -116,7 +127,7 @@ function chatbotResponse(mess) {
     {
       "type": "string",
       "unstructured": {
-        "id": "one",
+        "id": getParameterByName("code"),
         "text": mess,
         "timestamp": "timestamp"
       }
@@ -193,8 +204,8 @@ $(document).ready(function(){
 	var botName = 'betaChatbot';
 
 	var AWSconfig = {
-		"accessKey":"AKIAJ23AUY5QLKCDRE6A",
-		"secretKey":"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",
+		"accessKey":"",
+		"secretKey":"",
 		"S3Bucket":"awscloudsmg",
 		"region":"us-east-2",
 		"sessionToken":"",
@@ -205,16 +216,6 @@ $(document).ready(function(){
 		"identity_pool_id":"us-east-2:7ba1b559-8dd8-4280-a937-85169ef0c6a0"
 	};
 
-	
-	var getParameterByName = function(name, url) {
-		if (!url) url = window.location.href;
-		name = name.replace(/[\[\]]/g, "\\$&");
-		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-			results = regex.exec(url);
-		if (!results) return null;
-		if (!results[2]) return '';
-		return decodeURIComponent(results[2].replace(/\+/g, " "));
-	};
 
 	console.log("Code = "+getParameterByName("code"));
 
