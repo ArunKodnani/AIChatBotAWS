@@ -4,6 +4,7 @@ from datetime import datetime
 import boto3
 from urllib.parse import quote
 import json
+from boto3.dynamodb.conditions import Key,Attr
 
 API_KEY = 'xIAAbGzxOp6qTgHBDqR9P56Wa30cKLFE1r8r4QGntKGsyR2K0iOqj5KWU1R874mC1R6HmirA9C7AtfcseOo0_6IrZkfa8SNqbzKK0gJMwyDmv56uHjuzXXDcbLm-WnYx'
 
@@ -12,6 +13,10 @@ SEARCH_PATH = '/v3/businesses/search'
 
 OPEN_AT = time.time()
 SEARCH_LIMIT = 3
+url = 'https://search-chatbotdomain-a4foblwyclavfcvwdnwaaqucjq.us-east-1.es.amazonaws.com/restaurants/_search'
+dynamodb = boto3.resource('dynamodb',region_name='us-east-2')
+table = dynamodb.Table('yelp-restaurants')
+
 
 
 def request(host, path, api_key, url_params=None):
@@ -79,12 +84,25 @@ def lambda_handler(event, context):
     
     sqs = boto3.resource('sqs')
     queue = sqs.get_queue_by_name(QueueName = 'userRequestsQueue')
+    # testcui = 'Indian'
+    # payload = {'q': testcui}
+    # response  = requests.get(url,payload)
+    # dict = response.json()
+    # for element in dict['hits']['hits']:
+    #     id = element['_source']['RestaurantID']
+    #     dynamoResponse = table.query(KeyConditionExpression=Key('id').eq(id))
+    #     restaurant_location = dynamoResponse['Items'][0]['location']['display_address'][0]+ dynamoResponse['Items'][0]['location']['display_address'][1]
+    #     restaurant_name = dynamoResponse['Items'][0]['name']
+    #     print(restaurant_location)
+    #     print(restaurant_name)
+    # print(response.json())
+  
     
     
     for message in queue.receive_messages():
         tempMessage = message
         userData = json.loads(message.body)
-
+        recommendations = []
         input_date = userData['Date']
         input_time = userData['Time']
         complete_date = datetime.strptime(input_date + " " + input_time, '%Y-%m-%d %H:%M')
@@ -94,12 +112,19 @@ def lambda_handler(event, context):
         contact = userData['Contact']
         sort_by = "rating"
         number_of_people = userData['PeopleCount']
-        businesses = query_api(term, location, int(openAt), sort_by)
-        recommendations = []
-        for business in businesses:
+        payload = {'q': term}
+        response  = requests.get(url,payload)
+        dict = response.json()
+        for element in dict['hits']['hits']:
+            id = element['_source']['RestaurantID']
+            dynamoResponse = table.query(KeyConditionExpression=Key('id').eq(id))
+            restaurant_location = dynamoResponse['Items'][0]['location']['display_address'][0]+ dynamoResponse['Items'][0]['location']['display_address'][1]
+            restaurant_name = dynamoResponse['Items'][0]['name']
+            print(restaurant_location)
+            print(restaurant_name)
             recommendation = {}
-            recommendation[0] = business['name']
-            recommendation[1] = ' '.join(str(e) for e in business['location']['display_address'])
+            recommendation[0] = restaurant_name
+            recommendation[1] = restaurant_location
             recommendations.append(recommendation)
     
     
@@ -110,6 +135,7 @@ def lambda_handler(event, context):
             index = index + 1
         message = message + "Enjoy your meal!"
         print(message)
+        print("testing print")
         # TODO implement
         client = boto3.client('sns')
         response = client.publish(
